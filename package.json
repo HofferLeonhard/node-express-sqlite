@@ -1,0 +1,32 @@
+{
+  "name": "express-sqlite",
+  "version": "1.0.0",
+  "description": "simple nodejs app for using expressjs with sqlite package",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "multer": "^1.3.0",
+    "sqlite3": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HofferLeonhard/node-express-sqlite.git"
+  },
+  "keywords": [
+    "express",
+    "sqlite",
+    "angular",
+    "api",
+    "rest"
+  ],
+  "author": "Ouandi Hoffer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HofferLeonhard/node-express-sqlite/issues"
+  },
+  "homepage": "https://github.com/HofferLeonhard/node-express-sqlite#readme"
+}

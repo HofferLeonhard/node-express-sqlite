@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+	<title>Node Express Sqlite</title>
+
+	<!-- Import de la librairie Angular JS -->
+	<script src="angular.min.js"></script>
+
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+	<!-- Ecoute et Reception de la reponse du serveur à travers un simple data binding Angular JS -->
+
+	<!-- Réception de la reponse su serveur apres l'exécution de la première fonction d'appel rest  saveOneUser (), à travers la variable : server.response1 du scope de ce controlleur-->
+	Réponses du serveur :
+	<br/>
+	Réponse 1 : Enregistrer un utilisateur à la fois
+	<div>{{server.response1}}</div> 
+
+	<!-- Réception de la reponse su serveur apres l'exécution de la deuxième fonction d'appel rest  saveMultiUsers (), à travers la variable : server.response2 du scope de ce controlleur-->
+	<br/>
+	Réponse 2 : Enregistrer plusieurs utilisateurs à la fois
+	<div>{{server.response2}}</div>
+
+
+	<!-- Gestion du controleur -->
+	<script>
+
+		// Créaton du module principal de l'application
+		var app = angular.module('myApp', []);
+		
+		// Controleur principal
+		app.controller('myCtrl', function($scope,$http) {
+			// Variable du serveur pour contenir les reponses de celui-ci
+			$scope.server = {
+				response1 : "",
+				response2 : ""
+			}
+
+			
+
+			// Enregistrer un utilisateur à la fois
+			$scope.saveOneUser = function(){
+				// Exemple d'utilisateur
+				var user = {
+					nom : "Ouandi Mbiandja",
+					prenom : "Hoffer",
+					sexe : "Masculin",
+					email : "hofferouandi@yahoo.fr"
+				}
+
+				// Création d'unn formulaire vide
+				var formData = new FormData();
+				
+				// Ajout de l'utilisateur dans le formulaire
+				for(var id in user)
+					formData.append(id, user[id]);
+			   
+			   // Envoi de la requète via la méthode post de $http
+				$http.post("http://localhost:3000/user/add/", formData, {
+					transformRequest: angular.identity,
+					headers: {'Content-Type': undefined}
+				}).then(function(response) {
+					// Réception des résultats de la requetes : à travers l'attribut data de response
+					$scope.server.response1 = response.data;
+				}, function(response) {
+					// En cas d'érreur
+					$scope.server.response1 = "Erreur de communication avec  le serveur REST : "+JSON.stringify(response);
+				}); 
+			}
+
+			// Enregistrer plusieurs utilisateurs à la fois
+			$scope.saveMultiUsers = function(){
+				// Exemple de collection d'utilisateurs
+				var users = {
+					// User 1
+					user1 : {
+						nom : "User1 - Ouandi Mbiandja",
+						prenom : "User1 - Hoffer",
+						sexe : "User1 - Masculin",
+						email : "User1 - hofferouandi@yahoo.fr"
+					},
+
+					// User 2
+					user2 : {
+						nom : "User2 - Ouandi Mbiandja",
+						prenom : "User2 - Hoffer",
+						sexe : "User2 - Masculin",
+						email : "User2 - hofferouandi@yahoo.fr"
+					},
+				}
+
+				// Création d'unn formulaire vide
+				var formData = new FormData();
+				
+				// Ajout de l'utilisateur dans le formulaire
+				for(var id in users){
+					/* 
+					NB : stringify est une fonction permettant de convertir un objet JS en chaine de caractères
+						 Elle est utilisée ici car le formulaire ne peut contenir de valeurs objets, uniquement des chaines de caractères sont acceptées.
+						 Donc celle-ci convertira les valeurs objets de chaque user en string
+					*/
+
+					formData.append(id, JSON.stringify(users[id]));
+				}
+			   
+			   	// Envoi de la requète via la méthode post de $http
+				$http.post("http://localhost:3000/user/add/multi", formData, {
+					transformRequest: angular.identity,
+					headers: {'Content-Type': undefined}
+				}).then(function(response) {
+					// Réception des résultats de la requetes : à travers l'attribut data de response
+					$scope.server.response2 = response.data;
+				}, function(response) {
+					// En cas d'érreur
+					$scope.server.response2 = "Erreur de communication avec  le serveur REST : "+JSON.stringify(response);
+				}); 
+
+
+			}
+			
+
+			// Appel des deux fonctions ci-dessus
+			$scope.saveOneUser();  // Pour enregistrer un utilisateur
+			$scope.saveMultiUsers(); // Pour enregistrer plusieurs utilisateurs
+
+		});
+	</script>
+
+</body>
+</html>
